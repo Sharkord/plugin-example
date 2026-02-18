@@ -46,5 +46,4 @@ const onUnload = (ctx: PluginContext) => {
   ctx.log("My Plugin unloaded");
 };
 
-export { onLoad, onUnload };
-export { components };
+export { onLoad, onUnload, components };
