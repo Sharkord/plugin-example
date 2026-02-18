@@ -1,0 +1,27 @@
+{
+  "name": "plugin-example",
+  "version": "0.0.1",
+  "module": "src/index.ts",
+  "sharkord": {
+    "entry": "index.js",
+    "author": "Me",
+    "homepage": "https://some-page.com",
+    "description": "This a Sharkord plugin example.",
+    "logo": "https://some-page.com/logo.png"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "bun build src/index.ts --outdir dist/plugin-example --target bun --minify --format esm && cp package.json dist/plugin-example",
+    "build:dev": "bun run build && cp -r dist/* /home/martino/repos/sharkord/apps/server/data/plugins/"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/react": "^19.2.14"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "react": "^19.2.4"
+  }
+}
