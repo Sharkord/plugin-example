@@ -1,14 +1,4 @@
-import {
-  type PluginContext,
-  PluginSlot,
-  type TPluginComponentsMapBySlotId,
-  type TInvokerContext,
-} from "@sharkord/plugin-sdk";
-import { HomeTest } from "./components/test";
-
-const components: TPluginComponentsMapBySlotId = {
-  [PluginSlot.HOME_SCREEN]: [HomeTest],
-};
+import { type PluginContext, type TInvokerContext } from "@sharkord/plugin-sdk";
 
 const onLoad = async (ctx: PluginContext) => {
   ctx.log("My Plugin loaded");
@@ -28,8 +18,8 @@ const onLoad = async (ctx: PluginContext) => {
     ctx.log(`User joined: ${username} (ID: ${userId})`);
   });
 
-  // this will register our components to be rendered in the specified slots
-  ctx.ui.registerComponents(components);
+  // enable the plugin's components (if any) to make them active in the UI
+  ctx.ui.enable();
 
   // register a command that users can execute
   ctx.commands.register({
@@ -46,4 +36,4 @@ const onUnload = (ctx: PluginContext) => {
   ctx.log("My Plugin unloaded");
 };
 
-export { onLoad, onUnload, components };
+export { onLoad, onUnload };
