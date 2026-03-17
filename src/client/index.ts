@@ -2,10 +2,10 @@ import {
   PluginSlot,
   type TPluginComponentsMapBySlotId,
 } from "@sharkord/plugin-sdk";
-import { HomeTest } from "./components/test";
+import { Home } from "./components/home";
 
 const components: TPluginComponentsMapBySlotId = {
-  [PluginSlot.HOME_SCREEN]: [HomeTest],
+  [PluginSlot.HOME_SCREEN]: [Home],
 };
 
 export { components };

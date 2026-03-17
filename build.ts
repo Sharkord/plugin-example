@@ -1,5 +1,6 @@
 import type { BunPlugin } from "bun";
 import fs from "fs/promises";
+import { PLUGIN_SDK_VERSION } from "@sharkord/plugin-sdk";
 
 const pluginId = "plugin-example";
 const outdir = `dist/${pluginId}`;
@@ -41,10 +42,12 @@ const clientGlobals: BunPlugin = {
   },
 };
 
+await fs.rm(outdir, { recursive: true, force: true });
+
 await Promise.all([
   Bun.build({
-    entrypoints: ["src/server.ts"],
-    outdir,
+    entrypoints: ["src/server/index.ts"],
+    outdir: `${outdir}/server`,
     target: "bun",
     minify: true,
     format: "esm",
@@ -52,8 +55,8 @@ await Promise.all([
   }),
 
   Bun.build({
-    entrypoints: ["src/client.ts"],
-    outdir,
+    entrypoints: ["src/client/index.ts"],
+    outdir: `${outdir}/client`,
     target: "browser",
     minify: true,
     format: "esm",
@@ -61,4 +64,13 @@ await Promise.all([
   }),
 ]);
 
-await fs.copyFile("package.json", `${outdir}/package.json`);
+// patch package.json with correct plugin sdk version
+const pkg = JSON.parse(await fs.readFile("package.json", "utf-8"));
+
+pkg.sharkord.sdkRange = `${PLUGIN_SDK_VERSION}`;
+
+await fs.writeFile(
+  `${outdir}/package.json`,
+  JSON.stringify(pkg, null, 2),
+  "utf-8",
+);

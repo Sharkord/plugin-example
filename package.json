@@ -1,16 +1,17 @@
 {
   "name": "plugin-example",
   "version": "0.0.1",
-  "module": "src/server.ts",
+  "module": "src/server/index.ts",
   "sharkord": {
     "entry": {
-      "server": "server.js",
-      "client": "client.js"
+      "server": "server/index.js",
+      "client": "client/index.js"
     },
     "author": "Me",
     "homepage": "https://some-page.com",
     "description": "This a Sharkord plugin example.",
-    "logo": "https://some-page.com/logo.png"
+    "logo": "https://placehold.co/500x500/white/black",
+    "sdkRange": "__ignore__"
   },
   "type": "module",
   "bun-create": {
@@ -29,6 +30,8 @@
   },
   "peerDependencies": {
     "typescript": "^5",
-    "react": "^19"
+    "react": "^19",
+    "reselect": "^5",
+    "re-reselect": "^5"
   }
 }

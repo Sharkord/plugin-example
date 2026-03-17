@@ -1,4 +1,4 @@
-import { type PluginContext, type TInvokerContext } from "@sharkord/plugin-sdk";
+import { type PluginContext } from "@sharkord/plugin-sdk";
 
 const onLoad = async (ctx: PluginContext) => {
   ctx.log("My Plugin loaded");
@@ -26,8 +26,10 @@ const onLoad = async (ctx: PluginContext) => {
     name: "hello",
     description: "Tells the executor hello with their user id.",
     args: [],
-    async executes(invokerCtx: TInvokerContext) {
-      return `Hello, ${invokerCtx.userId}! The current value of the example setting is: ${await settings.get("exampleValue")}`;
+    async executes(invokerCtx) {
+      const value = await settings.get("exampleValue");
+
+      return `Hello, ${invokerCtx.userId}! The current value of the example setting is: ${value}`;
     },
   });
 };

@@ -1,9 +1,10 @@
-import { type TPluginSlotContext } from "@sharkord/plugin-sdk";
-import { Button, Popover, PopoverContent, PopoverTrigger } from "@sharkord/ui";
-import { useState } from "react";
+import { Button } from "@sharkord/ui";
+import { memo, useState } from "react";
+import { useCurrentVoiceChannelId } from "../store/hooks";
 
-const HomeTest = ({ currentVoiceChannelId }: TPluginSlotContext) => {
+const Home = memo(() => {
   const [counter, setCounter] = useState(0);
+  const currentVoiceChannelId = useCurrentVoiceChannelId();
 
   return (
     <div className="flex flex-col gap-2 w-full h-full p-4">
@@ -23,6 +24,6 @@ const HomeTest = ({ currentVoiceChannelId }: TPluginSlotContext) => {
       </p>
     </div>
   );
-};
+});
 
-export { HomeTest };
+export { Home };
