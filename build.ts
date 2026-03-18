@@ -1,16 +1,23 @@
 import { build } from "@sharkord/plugin-cli";
 import { PLUGIN_SDK_VERSION } from "@sharkord/plugin-sdk";
 import fs from "fs/promises";
+import path from "path";
 
 const copyPluginToSharkord = async (builtPluginPath: string) => {
   // adjust if necessary
   const sharkordPluginsPath = `${process.env.HOME}/.config/sharkord/plugins`;
-
-  console.log(
-    `Copying built plugin from ${builtPluginPath} to ${sharkordPluginsPath}...`,
+  const targetPluginPath = path.join(
+    sharkordPluginsPath,
+    path.basename(builtPluginPath),
   );
 
-  await fs.cp(builtPluginPath, sharkordPluginsPath, {
+  console.log(
+    `Copying built plugin from ${builtPluginPath} to ${targetPluginPath}...`,
+  );
+
+  await fs.rm(targetPluginPath, { recursive: true, force: true });
+
+  await fs.cp(builtPluginPath, targetPluginPath, {
     recursive: true,
   });
 };

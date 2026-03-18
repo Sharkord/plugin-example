@@ -4,8 +4,7 @@
   "module": "src/server/index.ts",
   "type": "module",
   "scripts": {
-    "build": "bun build.ts",
-    "build:dev": "bun run build && cp -r dist/* /home/martino/repos/sharkord/apps/server/data/plugins/"
+    "build": "bun build.ts"
   },
   "devDependencies": {
     "@types/bun": "latest",
