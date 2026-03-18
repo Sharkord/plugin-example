@@ -22,14 +22,24 @@ const onLoad = async (ctx: PluginContext) => {
   ctx.ui.enable();
 
   // register a command that users can execute
-  ctx.commands.register({
+  ctx.commands.register<{
+    name: string;
+  }>({
     name: "hello",
     description: "Tells the executor hello with their user id.",
-    args: [],
-    async executes(invokerCtx) {
+    args: [
+      {
+        name: "name",
+        description:
+          "An example argument that the user can provide when executing the command",
+        type: "string",
+        required: true,
+      },
+    ],
+    async executes(invokerCtx, args) {
       const value = await settings.get("exampleValue");
 
-      return `Hello, ${invokerCtx.userId}! The current value of the example setting is: ${value}`;
+      return `Hello, ${args.name}! The current value of exampleValue is: ${value}. I was invoked by user with ID: ${invokerCtx.userId}`;
     },
   });
 };

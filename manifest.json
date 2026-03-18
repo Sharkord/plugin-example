@@ -1,5 +1,6 @@
 {
   "id": "plugin-example",
+  "name": "Plugin Example",
   "author": "Me",
   "description": "This a Sharkord plugin example.",
   "homepage": "https://some-page.com",
