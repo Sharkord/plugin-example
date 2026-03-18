@@ -1,0 +1,9 @@
+{
+  "id": "plugin-example",
+  "author": "Me",
+  "description": "This a Sharkord plugin example.",
+  "homepage": "https://some-page.com",
+  "logo": "https://placehold.co/100x100/white/black",
+  "sdkRange": "TODO",
+  "version": "0.0.1"
+}
