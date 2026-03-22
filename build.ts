@@ -23,8 +23,8 @@ const copyPluginToSharkord = async (builtPluginPath: string) => {
 };
 
 const result = await build({
-  sdkRange: PLUGIN_SDK_VERSION,
+  sdkVersion: PLUGIN_SDK_VERSION,
 });
 
-// uncomment the following line to move the built plugin directly to the Sharkord plugins directory
+// uncomment the following line to move the built plugin directly to the Sharkord plugins directory, useful for development and testing
 // await copyPluginToSharkord(result.outDir);
