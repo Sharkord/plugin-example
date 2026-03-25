@@ -1,4 +1,4 @@
-import { build } from "@sharkord/plugin-cli";
+import { build } from "@sharkord/plugin-builder";
 import { PLUGIN_SDK_VERSION } from "@sharkord/plugin-sdk";
 import fs from "fs/promises";
 import path from "path";
