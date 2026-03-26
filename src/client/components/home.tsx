@@ -1,6 +1,6 @@
 import { Button, Input, Separator } from "@sharkord/ui";
 import { memo, useCallback, useState } from "react";
-import { useCallAction, useCurrentVoiceChannelId } from "../store/hooks";
+import { useCallAction } from "../store/hooks";
 
 const Home = memo(() => {
   const [a, setA] = useState<number>(0);
