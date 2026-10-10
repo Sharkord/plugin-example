@@ -1,59 +1,93 @@
 import {
-  createRegisterAction,
-  createRegisterCommand,
   type PluginContext,
+  type TUpgradeInfo,
+  type UnloadPluginContext,
+  type UpgradePluginContext,
 } from "@sharkord/plugin-sdk";
-import type { Actions } from "../contracts/actions";
-import type { Commands } from "../contracts/commands";
+import path from "path";
+import type { TPlugin, TRoll } from "../types";
 
-const onLoad = async (ctx: PluginContext) => {
-  ctx.log("My Plugin loaded");
+const onLoad = async (ctx: PluginContext<TPlugin>) => {
+  ctx.logger.log("Plugin example loaded");
 
-  const registerAction = createRegisterAction<Actions>(ctx);
-  const registerCommand = createRegisterCommand<Commands>(ctx);
-
-  // register settings that users can configure for your plugin in the settings menu
   const settings = await ctx.settings.register([
     {
-      key: "exampleValue",
-      name: "Example Value",
-      description: "An example setting for demonstration purposes",
-      type: "string",
-      defaultValue: "Hello World",
+      key: "maxSides",
+      name: "Maximum sides",
+      description: "The largest die this plugin will roll.",
+      type: "number",
+      defaultValue: 20,
     },
-  ]);
+  ] as const);
 
-  // enable the plugin's components (if any) to make them active in the UI
+  const totalPath = path.join(ctx.dataPath, "total-rolls.txt");
+
+  const readTotal = async () => {
+    try {
+      const file = Bun.file(totalPath);
+      const text = await file.text();
+
+      return Number(text) || 0;
+    } catch (error) {
+      return 0;
+    }
+  };
+
+  const roll = async (userId: number, sides: number): Promise<TRoll> => {
+    const max = Math.min(sides, settings.get("maxSides"));
+    const total = (await readTotal()) + 1;
+
+    await Bun.write(totalPath, String(total));
+
+    const result = {
+      userId,
+      total,
+      sides: max,
+      value: 1 + Math.floor(Math.random() * max),
+    };
+
+    // every client of this plugin gets this, through `usePush` on the client
+    ctx.push.toAll(result);
+
+    return result;
+  };
+
+  // makes this plugin's components render. Pass a `{ [slot]: Permission }` map
+  // to only show a slot to users who hold that permission.
   ctx.ui.enable();
 
-  // listen to an event (e.g., when a user joins the server) and log it to the console
-  ctx.events.on("user:joined", ({ userId, username }) => {
-    ctx.log(`User joined: ${username} (ID: ${userId})`);
+  ctx.events.on("user:joined", ({ username }) => {
+    ctx.logger.debug(`${username} joined`);
   });
 
-  // register a command that users can execute by typing "/hello" in the chat
-  registerCommand(
-    "hello",
-    {
-      description: "Tells the executor hello with their user id.",
-      args: [{ name: "name", type: "string", required: true }],
-    },
-    async (invoker, args) => {
-      const value = await settings.get("exampleValue");
+  // typed in chat as `/roll 20`. The name and the shape of `execute` come from
+  ctx.commands.register({
+    name: "roll",
+    description: "Rolls a die.",
+    args: [{ name: "sides", type: "number", required: true }],
+    // requires: Permission.JOIN_VOICE_CHANNELS, // uncomment to require a specific permission to use this command
+    executes: async (invoker, args) => {
+      const { value, sides } = await roll(invoker.userId, args.sides);
 
-      return `Hello, ${args.name}! The current value of exampleValue is: ${value}. Your user ID is: ${invoker.userId}`;
+      return `You rolled ${value} on a d${sides}.`;
     },
-  );
+  });
 
-  // register a server action that can be called from the client
-  registerAction("sum", async (invoker, payload) => {
-    // this is a secure context, runs on the server, can access secrets and perform actions that the client cannot do
-    return payload.a + payload.b;
+  // the same thing for your own UI: called from the client, runs here, so it
+  // can reach secrets, the filesystem, and the rest of `ctx`.
+  ctx.actions.register({
+    name: "roll",
+    // requires: Permission.JOIN_VOICE_CHANNELS, // uncomment to require a permission to use this action
+    executes: (invoker, payload) => roll(invoker.userId, payload.sides),
   });
 };
 
-const onUnload = (ctx: PluginContext) => {
-  ctx.log("My Plugin unloaded");
+const onUnload = (ctx: UnloadPluginContext) => {
+  ctx.logger.log("Plugin example unloaded");
 };
 
-export { onLoad, onUnload };
+const onUpgrade = (ctx: UpgradePluginContext, info: TUpgradeInfo) => {
+  ctx.logger.log(`Upgraded from ${info.previousVersion} to ${info.version}`);
+};
+
+export { onLoad, onUnload, onUpgrade };

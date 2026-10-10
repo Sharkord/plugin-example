@@ -5,6 +5,6 @@
   "description": "This a Sharkord plugin example.",
   "homepage": "https://some-page.com",
   "logo": "https://placehold.co/100x100/white/black",
-  "sdkVersion": 1,
+  "sdkVersion": 2,
   "version": "0.0.1"
 }
