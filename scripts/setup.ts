@@ -24,7 +24,9 @@ for (const [name, packages] of repos) {
     await $`git clone --depth 1 https://github.com/Sharkord/${name}.git ${dir}`;
   }
 
-  await $`bun install`.cwd(dir);
+  // --ignore-scripts: sharkord trusts mediasoup, whose install step compiles a
+  // native worker from source on every core. Plugins only need its types.
+  await $`bun install --ignore-scripts`.cwd(dir);
   for (const pkg of packages) await $`bun link`.cwd(`${dir}/${pkg}`);
 }
 
