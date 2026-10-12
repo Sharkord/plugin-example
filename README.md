@@ -24,9 +24,10 @@ import is erased before anything reaches the browser.
 
 ## Running it
 
-`bun create` clones Sharkord and the plugin builder into `.repos/`, installs
-them and `bun link`s them into the plugin. To redo it or pull the latest
-versions of those repos at any time:
+The SDK and builder are not on npm yet. This clones Sharkord and the plugin
+builder into `.repos/`, installs them and `bun link`s them into the plugin.
+Run it once after `bun create`, and again any time you want their latest
+versions:
 
 ```bash
 bun run setup

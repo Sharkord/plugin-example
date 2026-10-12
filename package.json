@@ -17,6 +17,6 @@
     "typescript": "^5"
   },
   "bun-create": {
-    "postinstall": "bun scripts/setup.ts"
+    "start": "bun run setup"
   }
 }
