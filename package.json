@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "build": "bun build.ts",
-    "publish": "bun publish.ts"
+    "publish": "bun publish.ts",
+    "setup": "bun scripts/setup.ts"
   },
   "devDependencies": {
     "@types/bun": "latest",
@@ -14,5 +15,8 @@
   "peerDependencies": {
     "react": "^19",
     "typescript": "^5"
+  },
+  "bun-create": {
+    "postinstall": "bun scripts/setup.ts"
   }
 }

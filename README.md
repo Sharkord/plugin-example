@@ -24,8 +24,12 @@ import is erased before anything reaches the browser.
 
 ## Running it
 
+`bun create` clones Sharkord and the plugin builder into `.repos/`, installs
+them and `bun link`s them into the plugin. To redo it or pull the latest
+versions of those repos at any time:
+
 ```bash
-bun install
+bun run setup
 ```
 
 Point `SHARKORD_PLUGINS_PATH` in `.env` at your server's plugins folder (see
